@@ -4,7 +4,7 @@ import React from "react";
 const TextMessage = (props) => {
   return (
     <View style={styles.messageItem}>
-      <Text style={styles.messageText}>{props.mess}</Text>
+      <Text style={styles.messageText}>{props.data}</Text>
     </View>
   );
 };

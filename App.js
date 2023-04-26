@@ -2,7 +2,11 @@ import Status from "./components/Status";
 import { StatusBar, Platform, StyleSheet, Text, View } from "react-native";
 import MapView from "react-native-maps";
 import TextMessage from "./components/TextMessage";
-import MessageUtils from "./utiils/MessageUtils";
+import {
+  createTextMessage,
+  createImageMessage,
+  createLocationMessage,
+} from "./utiils/MessageUtils";
 import { useState } from "react";
 
 export default function App() {
@@ -22,8 +26,8 @@ export default function App() {
         <Text style={styles.partnerName}>Nguyen Danh Phuong</Text>
       </View>
       <View style={styles.conversation}>
-        <TextMessage mess="Hello" />
-        <TextMessage mess="ukafsdk" />
+        {/* <TextMessage data={messages[2]} />
+        <TextMessage data={messages[2]} /> */}
 
         <MapView initialRegion={{}} />
       </View>
