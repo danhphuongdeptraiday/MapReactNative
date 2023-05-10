@@ -1,25 +1,24 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { StyleSheet } from "react-native";
+import { Text } from "react-native";
+import { View } from "react-native";
 
-const TextMessage = (props) => {
-  return (
-    <View style={styles.messageItem}>
-      <Text style={styles.messageText}>{props.data}</Text>
-    </View>
-  );
+export default function TextMessage({ text }) {
+    return (
+        <View style={styles.messageItem}>
+            <Text style={styles.messageText}>{text}</Text>
+        </View>
+    );
 };
 
-export default TextMessage;
-
 const styles = StyleSheet.create({
-  messageItem: {
-    backgroundColor: "red",
-    padding: 10,
-    marginBottom: 15,
-  },
-
-  messageText: {
-    fontSize: 17,
-    color: "white",
-  },
+    messageItem: {
+        backgroundColor: '#eb6f36',
+        borderRadius: 20,
+        paddingHorizontal: 16,
+        paddingVertical: 8
+    },
+    messageText: {
+        fontSize: 15,
+        color: 'white'
+    }
 });
