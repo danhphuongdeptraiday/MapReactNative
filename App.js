@@ -1,4 +1,11 @@
-import { StyleSheet, Text, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  KeyboardAvoidingView,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from "react-native";
 import Status from "./components/Status";
 import { useEffect, useState } from "react";
 import {
@@ -100,41 +107,49 @@ export default function App() {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Status />
-      <View style={styles.partner}>
-        <Text style={styles.partnerName}>Mr. Dang Dinh Quan</Text>
-      </View>
-      {fullscreenImageId && (
-        <TouchableHighlight
-          style={styles.fullscreenOverlay}
-          onPress={() => setFullscreenImageId(null)}
-        >
-          <Image
-            style={styles.fullscreenImage}
-            source={{
-              uri: messages.find((e) => e.id == fullscreenImageId).uri,
-            }}
-          />
-        </TouchableHighlight>
-      )}
-      <View style={styles.conversation}>
-        <FlatList
-          style={{ flex: 1 }}
-          data={messages}
-          renderItem={renderMessageItem}
-        />
-      </View>
-      <View style={styles.bottom}></View>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={{ flex: 1 }}>
+          <Status />
+          <View style={styles.partner}>
+            <Text style={styles.partnerName}>Mr. Dang Dinh Quan</Text>
+          </View>
+          {fullscreenImageId && (
+            <TouchableHighlight
+              style={styles.fullscreenOverlay}
+              onPress={() => setFullscreenImageId(null)}
+            >
+              <Image
+                style={styles.fullscreenImage}
+                source={{
+                  uri: messages.find((e) => e.id == fullscreenImageId).uri,
+                }}
+              />
+            </TouchableHighlight>
+          )}
+          <View style={styles.conversation}>
+            <FlatList
+              style={{ flex: 1 }}
+              data={messages}
+              renderItem={renderMessageItem}
+            />
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
+      {/* <View style={styles.bottom}></View> */}
 
       <Toolbar />
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: "space-between",
   },
   partner: {
     padding: 17,
