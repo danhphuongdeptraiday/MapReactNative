@@ -6,6 +6,13 @@ import {
   View,
 } from "react-native";
 import React, { useState } from "react";
+import * as Location from "expo-location";
+import * as ImagePicker from "expo-image-picker";
+import {
+  createImageMessage,
+  createLocationMessage,
+  createTextMessage,
+} from "../utils/MessageUtils";
 
 const ToolbarButton = ({ title, onPress }) => {
   return (
@@ -23,13 +30,44 @@ const onPressLocation = () => {
   console.log("Hello");
 };
 
-const Toolbar = () => {
+const Toolbar = ({ addMessage }) => {
   const [text, setText] = useState("");
   return (
     <View style={styles.toolbar}>
       <View style={styles.buttonContainer}>
-        <ToolbarButton title="📷" onPress={onPressCamera} />
-        <ToolbarButton title="🛹" onPress={onPressLocation} />
+        <ToolbarButton
+          title="📷"
+          onPress={async () => {
+            let result = await ImagePicker.launchImageLibraryAsync({
+              allowsEditing: true,
+              quality: 1,
+            });
+            if (!result.canceled) {
+              addMessage(createImageMessage(result.assets[0].uri));
+              return;
+            } else {
+              alert("You did not select any image");
+            }
+          }}
+        />
+        <ToolbarButton
+          title="🛹"
+          onPress={async () => {
+            let status = await Location.requestForegroundPermissionsAsync();
+            if (status !== "granted") {
+              console.log("Permission to access location was denied");
+              return;
+            }
+
+            let location = await Location.getCurrentPositionAsync({});
+            addMessage(
+              createLocationMessage({
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
+              })
+            );
+          }}
+        />
       </View>
 
       <View style={styles.inputContainer}>
@@ -41,8 +79,22 @@ const Toolbar = () => {
             setText(text);
           }}
           blurOnSubmit={false}
-          onSubmitEditing={setText}
+          // onSubmitEditing={}
+
+          // onSubmitEditing={}
         />
+      </View>
+
+      <View style={styles.send}>
+        <Text
+          style={styles.button}
+          onPress={() => {
+            addMessage(createTextMessage(text));
+            setText("");
+          }}
+        >
+          📧
+        </Text>
       </View>
     </View>
   );
@@ -54,12 +106,12 @@ const styles = StyleSheet.create({
   toolbar: {
     height: 50,
     width: "100%",
-    backgroundColor: "#6495ed",
+    backgroundColor: "#b7b5cf",
     display: "flex",
     flexDirection: "row",
-    borderTopColor: "black",
-    borderTopWidth: 1,
-    justifyContent: "space-around",
+    // borderTopColor: "black",
+    // borderTopWidth: 1,
+    justifyContent: "space-between",
     alignItems: "center",
   },
 
@@ -78,12 +130,11 @@ const styles = StyleSheet.create({
   },
 
   input: {
-    borderColor: "black",
+    borderColor: "white",
     borderWidth: 1,
-    // backgroundColor: "white",
     width: "100%",
     fontSize: 17,
-    color: "black",
+    color: "white",
     height: "100%",
     paddingLeft: 20,
     borderRadius: 20,

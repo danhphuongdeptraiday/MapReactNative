@@ -5,6 +5,7 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   TouchableWithoutFeedback,
+  ScrollView,
 } from "react-native";
 import Status from "./components/Status";
 import { useEffect, useState } from "react";
@@ -75,6 +76,11 @@ export default function App() {
     }
   };
 
+  const addMessage = (object) => {
+    console.log(object);
+    setMessages((preState) => [...preState, object]);
+  };
+
   const renderMessageItem = ({ item }) => {
     if (item.type != "location") {
       return (
@@ -139,9 +145,10 @@ export default function App() {
           </View>
         </View>
       </TouchableWithoutFeedback>
+
       {/* <View style={styles.bottom}></View> */}
 
-      <Toolbar />
+      <Toolbar addMessage={addMessage} />
     </KeyboardAvoidingView>
   );
 }
